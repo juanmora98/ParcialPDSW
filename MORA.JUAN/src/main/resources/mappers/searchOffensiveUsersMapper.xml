@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.persistence.mybatisimpl.mappers.searchOffensiveUsersMapper">
+
+<resultMap type='Comment' id='CommentsResult'>
+        <id property='id' column='id'/>        
+        <result property='name' column='name'/>
+        <result property='creationDate' column='comment_content'/>
+    </resultMap>
+    
+    
+    <select id="searchOffensiveLanguageComments" resultMap="CommentsResult" parameterType="map">
+            SELECT 
+            u.login,
+            u.name,
+            bc.content as comment_content
+            FROM 
+            BLOG_COMMENT as bc
+            LEFT JOIN BLOG as b
+            ON b.id = bc.blog_id
+            LEFT JOIN BLOG_USUARIO as u
+            ON u.login = bc.author
+            WHERE
+            bc.content LIKE '%tonto%'
+            OR bc.content LIKE '%burro%'
+    </select>
+
+</mapper>

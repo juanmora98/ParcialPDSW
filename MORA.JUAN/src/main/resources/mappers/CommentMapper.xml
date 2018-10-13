@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<mapper namespace="edu.eci.pdsw.persistence.mybatisimpl.mappers.CommentMapper">
+    
+    <resultMap type="Comment" id="CommentResult">
+        <id property="id" column="id"/>
+        <result property="creationDate" column="comment_date"/>
+        <result property="content" column="comment_content"/>
+        <association property="author" column="author" javaType="User" resultMap="edu.eci.pdsw.persistence.mybatisimpl.mappers.UserMapper.UserResult" >
+        </association>
+    </resultMap>
+
+    <select id="searchCommentsByBlogTitle" resultMap="CommentResult" parameterType="map">
+            SELECT 
+            u.login,
+            u.name,
+            bc.creation_date as comment_date,
+            bc.content as comment_content
+            FROM 
+            BLOG_COMMENT as bc
+            LEFT JOIN BLOG as b
+            ON b.id = bc.blog_id
+            LEFT JOIN BLOG_USUARIO as u
+            ON u.login = bc.author
+
+        <if test="title != null">
+            WHERE b.title = #{title}
+        </if> 
+    </select>
+
+</mapper>
